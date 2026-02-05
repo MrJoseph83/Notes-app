@@ -26,7 +26,7 @@ function wrapAsync(fn) {
 // CORS configuration (allow local frontend and production origin)
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://notes-app-zeta-bay.vercel.app"],
+    origin: ["https://notes-app-one-murex-78.vercel.app/"],
     credentials: true,
   })
 );
