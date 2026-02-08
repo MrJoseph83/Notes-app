@@ -1,5 +1,10 @@
 // Simple Notes API using Express, Prisma and Supabase auth
 
+// Load environment variables from `.env` during local development only
+if (process.env.NODE_ENV !== 'production') {
+  require("dotenv").config();
+}
+
 const express = require("express");
 const cors = require("cors");
 const { PrismaClient } = require("@prisma/client");
@@ -23,10 +28,17 @@ function wrapAsync(fn) {
   };
 }
 
-// CORS configuration (production origin)
+// CORS configuration: allow Vercel and Render deployments, plus localhost for development
+const allowedOrigins = [
+  "https://notes-app-one-murex-78.vercel.app",
+  "https://notes-app-7it6.onrender.com",
+  "http://localhost:3000",
+  "http://localhost:3001",
+];
+
 app.use(
   cors({
-    origin: ["https://notes-app-one-murex-78.vercel.app"],
+    origin: allowedOrigins,
     credentials: true,
   })
 );

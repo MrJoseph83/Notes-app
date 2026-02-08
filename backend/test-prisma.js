@@ -1,3 +1,8 @@
+// Load environment variables from `.env` during local development only
+if (process.env.NODE_ENV !== 'production') {
+  require("dotenv").config();
+}
+
 const { PrismaClient } = require("@prisma/client")
 
 const prisma = new PrismaClient();
