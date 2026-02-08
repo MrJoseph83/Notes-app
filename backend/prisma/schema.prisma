@@ -18,21 +18,21 @@ model User {
 }
 
 model Appointment {
-  id        Int      @id @default(autoincrement())
   title     String
   startTime DateTime
   endTime   DateTime
   userId    String
+  id        Int      @id @default(autoincrement())
   user      User     @relation(fields: [userId], references: [id])
 }
 
 model Note {
-  id        Int       @id @default(autoincrement())
   title     String
   content   String?
   createdAt DateTime  @default(now())
-  deletedAt DateTime?
   userId    String
+  id        Int       @id @default(autoincrement())
+  deletedAt DateTime?
 }
 
 enum Role {
