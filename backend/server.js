@@ -6,6 +6,15 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const express = require("express");
+// Prefer IPv4 address resolution to avoid environments without IPv6 outbound routes
+try {
+  const dns = require('dns');
+  if (typeof dns.setDefaultResultOrder === 'function') {
+    dns.setDefaultResultOrder('ipv4first');
+  }
+} catch (e) {
+  console.warn('Could not set DNS result order to ipv4first:', e && e.message);
+}
 const cors = require("cors");
 const { PrismaClient } = require("@prisma/client");
 const { createClient } = require("@supabase/supabase-js");
