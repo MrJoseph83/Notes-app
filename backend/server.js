@@ -68,6 +68,41 @@ app.get("/diag/db", async (req, res) => {
   }
 });
 
+// TCP reachability diagnostic: attempt a raw TCP connection to the DB host/port
+const net = require('net');
+const { URL } = require('url');
+app.get('/diag/tcp', async (req, res) => {
+  const dbUrl = process.env.DATABASE_URL;
+  if (!dbUrl) return res.status(400).json({ ok: false, message: 'DATABASE_URL not configured' });
+
+  try {
+    // Parse host and port from the DATABASE_URL
+    const parsed = new URL(dbUrl.replace(/^postgres:/, 'postgres:'));
+    const host = parsed.hostname;
+    const port = Number(parsed.port) || 5432;
+
+    const socket = new net.Socket();
+    let settled = false;
+    const timeout = 5000;
+
+    const cleanup = (ok, info) => {
+      if (settled) return;
+      settled = true;
+      socket.destroy();
+      res.json({ ok, info });
+    };
+
+    socket.setTimeout(timeout);
+    socket.once('error', (err) => cleanup(false, { message: err.message }));
+    socket.once('timeout', () => cleanup(false, { message: 'timeout' }));
+    socket.connect(port, host, () => {
+      cleanup(true, { host, port });
+    });
+  } catch (err) {
+    return res.status(500).json({ ok: false, message: err?.message || String(err) });
+  }
+});
+
 // Middleware: validate Bearer token via Supabase and attach user to request
 async function authenticateUser(req, res, next) {
   try {
