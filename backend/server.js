@@ -55,6 +55,19 @@ app.get("/", (req, res) => {
   res.json(checks);
 });
 
+// Temporary diagnostic endpoint: attempt a lightweight DB query to verify connectivity
+app.get("/diag/db", async (req, res) => {
+  try {
+    // Ensure Prisma is connected and run a simple query
+    await prisma.$connect();
+    const result = await prisma.$queryRaw`SELECT 1 as ok`;
+    return res.json({ ok: true, result });
+  } catch (err) {
+    console.error("DB DIAG ERROR:", err && err.message ? { message: err.message, stack: err.stack } : err);
+    return res.status(500).json({ ok: false, message: err?.message || String(err), stack: process.env.NODE_ENV === 'development' ? err?.stack : undefined });
+  }
+});
+
 // Middleware: validate Bearer token via Supabase and attach user to request
 async function authenticateUser(req, res, next) {
   try {
