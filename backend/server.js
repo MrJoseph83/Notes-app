@@ -44,7 +44,16 @@ app.use(
 );
 
 // Health check
-app.get("/", (req, res) => res.json({ status: "ok", service: "api" }));
+app.get("/", (req, res) => {
+  const checks = {
+    status: "ok",
+    service: "api",
+    env: process.env.NODE_ENV || "development",
+    database: process.env.DATABASE_URL ? "configured" : "not configured",
+    supabase: process.env.SUPABASE_URL ? "configured" : "not configured",
+  };
+  res.json(checks);
+});
 
 // Middleware: validate Bearer token via Supabase and attach user to request
 async function authenticateUser(req, res, next) {
@@ -138,10 +147,16 @@ app.put(
 
 // Central error handler: log full error but expose generic message in production
 app.use((err, req, res, next) => {
-  console.error("UNHANDLED ERROR:", err);
+  console.error("UNHANDLED ERROR:", {
+    message: err.message,
+    code: err.code,
+    status: err.status,
+    stack: err.stack,
+  });
   const status = err.status || 500;
-  const message = process.env.NODE_ENV === "development" ? err.message || "Internal Server Error" : "Internal Server Error";
-  res.status(status).json({ error: message });
+  const isDev = process.env.NODE_ENV === "development";
+  const message = isDev ? err.message || "Internal Server Error" : "Internal Server Error";
+  res.status(status).json({ error: message, ...(isDev && { details: err.code || err.message }) });
 });
 
 // Graceful Prisma disconnect on shutdown signals
