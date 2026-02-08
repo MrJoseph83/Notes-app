@@ -23,7 +23,7 @@ function wrapAsync(fn) {
   };
 }
 
-// CORS configuration (allow local frontend and production origin)
+// CORS configuration (production origin)
 app.use(
   cors({
     origin: ["https://notes-app-one-murex-78.vercel.app"],
