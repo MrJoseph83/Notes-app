@@ -41,7 +41,10 @@ try {
 }
 import cors from "cors";
 // const cors = require("cors");
-const { PrismaClient } = require("@prisma/client");
+import { PrismaClient } from "@prisma/client";
+
+import { PrismaClient } from "@prisma/client";
+// const { PrismaClient } = require("@prisma/client");
 const { createClient } = require("@supabase/supabase-js");
 
 // Database and auth clients
