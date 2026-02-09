@@ -107,8 +107,8 @@ app.get("/diag/db", async (req, res) => {
 
 // TCP reachability diagnostic: attempt a raw TCP connection to the DB host/port
 // import net from 'net';
-const net = import('net');
-import { URL } from 'url';
+const net = require('net');
+const{ URL } = require('url');
 app.get('/diag/tcp', async (req, res) => {
   const dbUrl = process.env.DATABASE_URL;
   if (!dbUrl) return res.status(400).json({ ok: false, message: 'DATABASE_URL not configured' });
