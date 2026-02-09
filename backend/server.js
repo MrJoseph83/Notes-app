@@ -158,7 +158,7 @@ async function authenticateUser(req, res, next) {
   }
 }
 
-const { noteSchema } = require("./validation/note.schema");
+import { noteSchema } from "./validation/note.schema";
 
 // Create a note for the authenticated user
 app.post(
