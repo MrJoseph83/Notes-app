@@ -1,5 +1,15 @@
 // Simple Notes API using Express, Prisma and Supabase auth
+import pkg from 'pg';
+const { Client } = pkg;
 
+const client = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+});
+
+client.connect()
+  .then(() => console.log("RAW POSTGRES CONNECTED"))
+  .catch(err => console.error("RAW POSTGRES FAILED", err));
 // Load environment variables from `.env` during local development only
 if (process.env.NODE_ENV !== 'production') {
   require("dotenv").config();
