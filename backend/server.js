@@ -1,25 +1,25 @@
 // Simple Notes API using Express, Prisma and Supabase auth
-import pkg from 'pg';
-const { Client } = pkg;
+// import pkg from 'pg';
+// const { Client } = pkg;
 
-(async () => {
-  try {
-    console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL);
+// (async () => {
+//   try {
+//     console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL);
 
-    const client = new Client({
-      connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false },
-    });
+//     const client = new Client({
+//       connectionString: process.env.DATABASE_URL,
+//       ssl: { rejectUnauthorized: false },
+//     });
 
-    await client.connect();
-    console.log("RAW POSTGRES CONNECTED");
+//     await client.connect();
+//     console.log("RAW POSTGRES CONNECTED");
 
-    await client.end();
-  } catch (e) {
-    console.error("RAW POSTGRES FAILED:");
-    console.error(e);
-  }
-})();
+//     await client.end();
+//   } catch (e) {
+//     console.error("RAW POSTGRES FAILED:");
+//     console.error(e);
+//   }
+// })();
 
 
 // Load environment variables from `.env` during local development only
@@ -27,9 +27,9 @@ if (process.env.NODE_ENV !== 'production') {
   dotenv.config();
   // require("dotenv").config();
 }
-import express from "express";
+// import express from "express";
 
-// const express = require("express");
+const express = require("express");
 // Prefer IPv4 address resolution to avoid environments without IPv6 outbound routes
 try {
   
@@ -40,13 +40,12 @@ try {
 } catch (e) {
   console.warn('Could not set DNS result order to ipv4first:', e && e.message);
 }
-import cors from "cors";
-// const cors = require("cors");
-import { PrismaClient } from "@prisma/client";
+// import cors from "cors";
+const cors = require("cors");
 
 // import { PrismaClient } from "@prisma/client";
-// const { PrismaClient } = require("@prisma/client");
-import { createClient } from "@supabase/supabase-js";
+const { PrismaClient } = require("@prisma/client");
+const { createClient } = require("@supabase/supabase-js");
 
 // Database and auth clients
 const prisma = new PrismaClient();
@@ -107,8 +106,8 @@ app.get("/diag/db", async (req, res) => {
 });
 
 // TCP reachability diagnostic: attempt a raw TCP connection to the DB host/port
-import net from 'net';
-// const net = import('net');
+// import net from 'net';
+const net = import('net');
 import { URL } from 'url';
 app.get('/diag/tcp', async (req, res) => {
   const dbUrl = process.env.DATABASE_URL;
@@ -158,7 +157,7 @@ async function authenticateUser(req, res, next) {
   }
 }
 
-import { noteSchema } from "./validation/note.schema.js";
+const { noteSchema } = require("./validation/note.schema.js");
 
 // Create a note for the authenticated user
 app.post(
