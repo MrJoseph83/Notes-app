@@ -24,10 +24,12 @@ const { Client } = pkg;
 
 // Load environment variables from `.env` during local development only
 if (process.env.NODE_ENV !== 'production') {
-  require("dotenv").config();
+  dotenv.config();
+  // require("dotenv").config();
 }
+import express from "express";
 
-const express = require("express");
+// const express = require("express");
 // Prefer IPv4 address resolution to avoid environments without IPv6 outbound routes
 try {
   const dns = require('dns');
@@ -37,7 +39,8 @@ try {
 } catch (e) {
   console.warn('Could not set DNS result order to ipv4first:', e && e.message);
 }
-const cors = require("cors");
+import cors from "cors";
+// const cors = require("cors");
 const { PrismaClient } = require("@prisma/client");
 const { createClient } = require("@supabase/supabase-js");
 
