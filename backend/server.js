@@ -2,10 +2,24 @@
 import pkg from 'pg';
 const { Client } = pkg;
 
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false },
-});
+(async () => {
+  try {
+    console.log("DATABASE_URL exists:", !!process.env.DATABASE_URL);
+
+    const client = new Client({
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+    });
+
+    await client.connect();
+    console.log("RAW POSTGRES CONNECTED");
+
+    await client.end();
+  } catch (e) {
+    console.error("RAW POSTGRES FAILED:");
+    console.error(e);
+  }
+})();
 
 client.connect()
   .then(() => console.log("RAW POSTGRES CONNECTED"))
