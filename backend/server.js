@@ -21,9 +21,7 @@ const { Client } = pkg;
   }
 })();
 
-client.connect()
-  .then(() => console.log("RAW POSTGRES CONNECTED"))
-  .catch(err => console.error("RAW POSTGRES FAILED", err));
+
 // Load environment variables from `.env` during local development only
 if (process.env.NODE_ENV !== 'production') {
   require("dotenv").config();
