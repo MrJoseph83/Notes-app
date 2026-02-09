@@ -32,6 +32,7 @@ import express from "express";
 // const express = require("express");
 // Prefer IPv4 address resolution to avoid environments without IPv6 outbound routes
 try {
+  
   const dns = require('dns');
   if (typeof dns.setDefaultResultOrder === 'function') {
     dns.setDefaultResultOrder('ipv4first');
@@ -106,8 +107,9 @@ app.get("/diag/db", async (req, res) => {
 });
 
 // TCP reachability diagnostic: attempt a raw TCP connection to the DB host/port
-const net = require('net');
-const { URL } = require('url');
+import net from 'net';
+// const net = import('net');
+import { URL } from 'url';
 app.get('/diag/tcp', async (req, res) => {
   const dbUrl = process.env.DATABASE_URL;
   if (!dbUrl) return res.status(400).json({ ok: false, message: 'DATABASE_URL not configured' });
